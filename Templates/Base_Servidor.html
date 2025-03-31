@@ -1,0 +1,137 @@
+{% extends "Base.html" %}
+
+{% block content %}
+
+<title>Servidor</title>
+<div class="container">
+    <div class="container-fluid py-4">
+        <form class="needs-validation" novalidate method="POST" name="formulario" id="form_servidor" action="/servidor">
+            {{ form.hidden_tag() }}
+            
+            <h2 class="text-center mb-4">Cadastro de Servidor</h2>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="nome">Nome Completo<span class="text-danger">*</span></label>
+                        {{ form.nome(class_="form-control", id="nome" , placeholder="Nome completo do servidor", required=true) }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cpf">CPF<span class="text-danger">*</span></label>
+                        {{ form.cpf(class_="form-control", id="cpf", placeholder="Somente números", required=true) }}
+                        {% if form.cpf.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.cpf.errors[0] }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cargo">Cargo<span class="text-danger">*</span></label>
+                        {{ form.cargo(class_="form-control", id="cargo", required=true) }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="status">Status<span class="text-danger">*</span></label>
+                        {{ form.status(class_="form-control", id="status", required=true) }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="telefone">Telefone<span class="text-danger">*</span></label>
+                        {{ form.telefone(class_="form-control", id="telefone", placeholder="Somente números") }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="naturalidade">Naturalidade<span class="text-danger">*</span></label>
+                        {{ form.naturalidade(class_="form-control", id="naturalidade") }}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="data_nascimento">Data de Nascimento:<span class="text-danger">*</span></label>
+                        {{ form.data_nascimento(class_="form-control", type='date', id="data_nascimento") }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email:<span class="text-danger">*</span></label>
+                        {{ form.email(class_="form-control", id="email", placeholder="Email do servidor") }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="sexo">Sexo<span class="text-danger">*</span></label>
+                        {{ form.sexo(class_="form-control", id="sexo") }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="raca_cor">Raça/Cor<span class="text-danger">*</span></label>
+                        {{ form.raca_cor(class_="form-control", id="raca_cor") }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="identidade_genero">Identidade de Gênero<span class="text-danger">*</span></label>
+                        {{ form.identidade_genero(class_="form-control", id="identidade_genero") }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="aprovado_cotas">Aprovado em Cota<span class="text-danger">*</span></label>
+                        {{ form.aprovado_cotas(class_="form-control", id="aprovado_cotas") }}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Deficiência:<span class="text-danger">*</span></label>
+                <div class="row">
+                    <div class="col-md-6">
+                        {% for value, label in form.deficiencia.choices %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="deficiencia" value="{{ value }}" id="{{ value }}"
+                                       {% if form.deficiencia.data and value in form.deficiencia.data %} checked {% endif %}>
+                                <label class="form-check-label" for="{{ value }}">{{ label }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="data_posse">Data de Posse:<span class="text-danger">*</span></label>
+                {{ form.data_posse(class_="form-control", type='date', id="data_posse") }}
+            </div>
+            
+            <div class="form-group">
+                <label for="orgao_lotacao">Órgão de Lotação:<span class="text-danger">*</span></label>
+                {{ form.orgao_lotacao(class_="form-control", id="orgao_lotacao", placeholder="Órgão de lotação") }}
+            </div>
+            
+            <div class="form-group">
+                <label for="situacao_profissional">Situação Profissional<span class="text-danger">*</span></label>
+                {{ form.situacao_profissional(class_="form-control", id="situacao_profissional") }}
+            </div>
+            
+            <div class="form-group">
+                <label for="data_inicio_situacao">Data de Início da Situação:<span class="text-danger">*</span></label>
+                {{ form.data_inicio_situacao(class_="form-control", type='date', id="data_inicio_situacao") }}
+            </div>
+            
+            <div class="form-group">
+                <label for="data_saida_situacao">Data de Saída da Situação:</label>
+                {{ form.data_saida_situacao(class_="form-control", type='date', id="data_saida_situacao") }}
+            </div>
+            
+            <div class="text-center py-3">
+                <button type="submit" class="btn btn-primary">Cadastrar Servidor</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% for field, errors in form.errors.items() %}
+    <div class="alert alert-danger mt-2">
+        <strong>{{ field }}:</strong> {{ ', '.join(errors) }}
+    </div>
+{% endfor %}
+
+{% endblock %}

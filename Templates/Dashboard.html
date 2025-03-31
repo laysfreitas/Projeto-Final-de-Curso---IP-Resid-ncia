@@ -1,0 +1,34 @@
+{% extends "Base.html" %}
+
+{% block content %}
+    <div class="container-fluid">
+        <h1 class="text-center" style="padding: 1cm;">Dashboard de Dados - Servidores</h1>
+
+        <!-- Exibe a tabela -->
+        <h3 style="padding: 1cm; padding-left: 0cm;">Dados da Tabela Servidores</h3>
+        <div class="table-responsive" style="max-height: 400px;">
+            {{ tabela_html|safe }}  <!-- Exibe a tabela convertida em HTML -->
+        </div>
+
+        <!-- Exibe os gráficos -->
+        <script>
+            var fig1 = {{ fig|safe }}
+        </script>
+        
+        <script>
+            var fig2 = {{ fig_2|safe }}
+        </script>
+        
+        <script>
+            var fig3 = {{ fig_3|safe }}
+        </script>
+        
+        <script>
+            var fig4 = {{ fig_4|safe }}
+        </script>       
+
+        <script>
+            var fig6 = {{ fig_6|safe }}
+        </script> 
+    </div>
+{% endblock %}
