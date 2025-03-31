@@ -1,7 +1,5 @@
-import csv # Para manipulação de arquivos CSV
 import sqlite3 # Para manipulação de banco de dados SQLite
 import pandas as pd  # Para manipulação de dados
-import os  # Para verificar se o arquivo já existe
 
 # Classe Servidores: Representa um servidor e suas propriedades.
 class Servidores:

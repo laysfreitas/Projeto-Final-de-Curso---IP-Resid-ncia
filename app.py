@@ -95,6 +95,20 @@ def importar_csv_magistrados_para_sqlite(filepath):
     df.to_sql("magistrados", con, if_exists="append", index=False)
     con.close()
 
+def traduzir_erro(mensagem):
+    traducoes = {
+        "table servidores has no column named id": "Erro ao importar: A tabela 'servidores' não possui uma coluna chamada 'id'.",
+        "UNIQUE constraint failed": "Erro ao importar: O registro já existe no banco de dados.",
+        "datatype mismatch": "Erro ao importar: O tipo de dado está incorreto para uma coluna."
+    }
+    
+    for erro_ingles, erro_portugues in traducoes.items():
+        if erro_ingles in mensagem:
+            return erro_portugues
+
+    return mensagem  # Se não houver tradução, retorna o erro original
+
+
 # Defina o diretório de upload
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['ALLOWED_EXTENSIONS'] = {'csv'}
@@ -153,7 +167,8 @@ def importar_csv_magistrados():
                 os.remove(filepath)  # Remover o arquivo após a importação
                 flash("Dados importados com sucesso!", "success")
             except Exception as e:
-                flash(f"Erro ao importar: {e}", "danger")
+                flash(f"Erro ao importar: {traduzir_erro(str(e))}", "danger")
+
     
     return render_template('Importar_CSV_magistrados.html')
 
@@ -186,8 +201,7 @@ def dados():
     df_agrupado_cargo = df[['cpf','cargo']].drop_duplicates().groupby(['cargo']).size().reset_index(name='contagem')
 
     # Gráfico 1: Número de Servidores por Cargo
-    fig = px.bar(df_agrupado_cargo, x='cargo', y='contagem', color='cargo',
-                title='Número de Servidores por Cargo')
+    fig = px.bar(df_agrupado_cargo, x='cargo', y='contagem', color='cargo')
     # Personalizando layout
     fig.update_layout(
         xaxis_title='Cargo',
@@ -200,23 +214,30 @@ def dados():
 
 
     # Gráfico 2: Número de Servidores por Sexo
-    fig_2 = px.bar(df_agrupado_sexo, x='sexo', y='contagem', color='sexo',
-                   title='Número de Servidores por Sexo')
+    fig_2 = px.bar(df_agrupado_sexo, x='sexo', y='contagem', color='sexo')
     fig_2.update_layout(xaxis_title='Sexo', yaxis_title='Número de Servidores')
     fig_2.update_traces(marker=dict(line=dict(width=0.5, color='black')))
     fig_2.update_layout(barmode='group')
 
     # Gráfico 3: Distribuição de Servidores por Raça/Cor
-    fig_3 = px.pie(df_agrupado_raca, values='contagem', names='raca_cor',
-                   title='Distribuição de Servidores por Raça/Cor')
+    fig_3 = px.pie(df_agrupado_raca, values='contagem', names='raca_cor')
     fig_3.update_traces(textinfo='percent+label')
     fig_3.update_layout(title_text='Distribuição de Servidores por Raça/Cor')
 
     # Gráfico 4: Distribuição de Servidores por Deficiência
-    fig_4 = px.scatter(df_agrupado_deficiencia, x='deficiencia', y='contagem',
-                       title='Distribuição de Servidores por Deficiência')
+    fig_4 = px.scatter(df_agrupado_deficiencia, x='deficiencia', y='contagem')
     fig_4.update_layout(xaxis_title='Deficiência', yaxis_title='Número de Servidores')
     fig_4.update_traces(marker=dict(line=dict(width=0.5, color='black')))   
+
+    #Gráfico 5: Quantidade de servidores por situação profissional
+    # Agrupando por situação profissional
+    df_agrupado_situacao = df[['cpf','situacao_profissional']].groupby(['situacao_profissional']).size().reset_index(name='contagem')
+
+    # Criando o gráfico
+    fig_5 = px.pie(df_agrupado_situacao, names='situacao_profissional', values='contagem')
+    fig_5.update_layout(xaxis_title='Situação Profissional', yaxis_title='Número de Servidores')
+    fig_5.update_traces(marker=dict(line=dict(width=0.5, color='black')))
+
 
     #Gráfico 6: Soma de dias por situação profissional
     # Convertendo as colunas de data
@@ -232,8 +253,7 @@ def dados():
     df_agrupado_situacao = df_new.groupby(['situacao_profissional']).agg({'dias': 'mean'}).reset_index()
 
     # Criando o gráfico
-    fig_6 = px.bar(df_agrupado_situacao, x='situacao_profissional', y='dias', color='situacao_profissional',
-                title='Média de Dias por Situação Profissional')
+    fig_6 = px.bar(df_agrupado_situacao, x='situacao_profissional', y='dias', color='situacao_profissional')
     fig_6.update_layout(xaxis_title='Situação Profissional', yaxis_title='Média de Dias')
     fig_6.update_traces(marker=dict(line=dict(width=0.5, color='black')))
     fig_6.update_layout(barmode='group')
@@ -246,6 +266,7 @@ def dados():
                            fig_2=fig_2.to_html(full_html=False), 
                            fig_3=fig_3.to_html(full_html=False),
                            fig_4=fig_4.to_html(full_html=False),
+                           fig_5=fig_5.to_html(full_html=False),
                             fig_6=fig_6.to_html(full_html=False))
 
 # Rota para dados do gráfico
@@ -276,8 +297,7 @@ def dados_magistrado():
     df_agrupado_cargo = df[['cpf','cargo']].drop_duplicates().groupby(['cargo']).size().reset_index(name='contagem')
 
     # Gráfico 1: Número de Magistrados por Cargo
-    fig = px.bar(df_agrupado_cargo, x='cargo', y='contagem', color='cargo',
-                title='Número de Magistrados por Cargo')
+    fig = px.bar(df_agrupado_cargo, x='cargo', y='contagem', color='cargo')
     # Personalizando layout
     fig.update_layout(
         xaxis_title='Cargo',
@@ -290,23 +310,37 @@ def dados_magistrado():
 
 
     # Gráfico 2: Número de Magistrados por Sexo
-    fig_2 = px.bar(df_agrupado_sexo, x='sexo', y='contagem', color='sexo',
-                   title='Número de Magistrados por Sexo')
+    fig_2 = px.bar(df_agrupado_sexo, x='sexo', y='contagem', color='sexo')
     fig_2.update_layout(xaxis_title='Sexo', yaxis_title='Número de Magistrados')
     fig_2.update_traces(marker=dict(line=dict(width=0.5, color='black')))
     fig_2.update_layout(barmode='group')
 
-    # Gráfico 3: Distribuição de Magistrados por Raça/Cor
-    fig_3 = px.pie(df_agrupado_raca, values='contagem', names='raca_cor',
-                   title='Distribuição de Magistrados por Raça/Cor')
-    fig_3.update_traces(textinfo='percent+label')
-    fig_3.update_layout(title_text='Distribuição de Magistrados por Raça/Cor')
+    # Gráfico 3: Distribuição de Tipos de Promoção por Data de Promoção
+    # Convertendo a coluna de data para datetime
+    df['data_promocao'] = pd.to_datetime(df['data_promocao'], format='%d-%m-%y', errors='coerce')
+    # Agrupando por data de promoção
+    df_agrupado_promocao = df[['cpf','data_promocao']].drop_duplicates().groupby(['data_promocao']).size().reset_index(name='contagem')
+    # Criando o gráfico
+    fig_3 = px.line(df_agrupado_promocao, x='data_promocao', y='contagem')
+    fig_3.update_traces(marker=dict(line=dict(width=0.5, color='black')))
+    fig_3.update_layout(xaxis_title='Data de Promoção', yaxis_title='Número de Promoções')
 
-    # Gráfico 4: Distribuição de Magistrados por Deficiência
-    fig_4 = px.scatter(df_agrupado_deficiencia, x='deficiencia', y='contagem',
-                       title='Distribuição de Magistrados por Deficiência')
-    fig_4.update_layout(xaxis_title='Deficiência', yaxis_title='Número de Magistrados')
-    fig_4.update_traces(marker=dict(line=dict(width=0.5, color='black')))   
+
+    # Gráfico 4: Distribuição de Magistrados por tipo de promoção
+    # Agrupando por tipo de promoção
+    df_agrupado_promocao = df[['cpf','promocao']].drop_duplicates().groupby(['promocao']).size().reset_index(name='contagem')
+    # Criando o gráfico
+    fig_4 = px.pie(df_agrupado_promocao, values='contagem', names='promocao')
+    fig_4.update_traces(textinfo='percent+label')
+
+    # Gráfico 5: Quantidade de magistrados por situação profissional
+    # Agrupando por situação profissional
+    df_agrupado_situacao = df[['cpf','situacao_profissional']].groupby(['situacao_profissional']).size().reset_index(name='contagem')
+    # Criando o gráfico
+    fig_5 = px.bar(df_agrupado_situacao, x='situacao_profissional', y='contagem', color='situacao_profissional')
+    fig_5.update_layout(xaxis_title='Situação Profissional', yaxis_title='Número de Magistrados')
+    fig_5.update_traces(marker=dict(line=dict(width=0.5, color='black')))
+
 
     # Gráfico 6: Soma de dias por situação profissional
     # Convertendo as colunas de data
@@ -319,14 +353,15 @@ def dados_magistrado():
     df_new['dias'] = (df_new['data_saida_situacao'] - df_new['data_inicio_situacao']).dt.days
 
     # Agrupando por situação profissional
-    df_agrupado_situacao = df_new.groupby(['situacao_profissional']).agg({'dias': 'mean'}).reset_index()
+    df_agrupado_situacao = df_new.groupby(['situacao_profissional']).agg({'dias': 'sum'}).reset_index()
 
     # Criando o gráfico
-    fig_6 = px.bar(df_agrupado_situacao, x='situacao_profissional', y='dias', color='situacao_profissional',
-                title='Média de Dias por Situação Profissional')
-    fig_6.update_layout(xaxis_title='Situação Profissional', yaxis_title='Média de Dias')
+    fig_6 = px.bar(df_agrupado_situacao, x='situacao_profissional', y='dias', color='situacao_profissional')
+    fig_6.update_layout(xaxis_title='Situação Profissional', yaxis_title='Soma de Dias')
     fig_6.update_traces(marker=dict(line=dict(width=0.5, color='black')))
     fig_6.update_layout(barmode='group')
+
+
 
     # Renderiza o template com os dados e gráficos
     return render_template('Dashboard_Magistrado.html', tabela_html=tabela_html, 
@@ -334,8 +369,8 @@ def dados_magistrado():
                            fig_2=fig_2.to_html(full_html=False), 
                            fig_3=fig_3.to_html(full_html=False),
                            fig_4=fig_4.to_html(full_html=False),
+                           fig_5=fig_5.to_html(full_html=False),
                            fig_6=fig_6.to_html(full_html=False))
-
 
 
 # Rota para exibir e processar o formulário de cadastro de servidores

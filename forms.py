@@ -4,9 +4,9 @@ from wtforms.validators import DataRequired, Length, Email, Regexp
 
 class formServidor(FlaskForm):
     # Campos de texto
-    nome = StringField('Nome', validators=[DataRequired(), Length(min=2, max=50)])
-    cpf = StringField('CPF', validators=[DataRequired(), Length(min=11, max=11), Regexp('^\\d{11}$', message="CPF inválido!")])
-    email = StringField('Email', validators=[DataRequired(),Email(message="Email inválido!")])
+    nome = StringField('Nome', validators=[DataRequired(message="Preenchimento obrigatório."), Length(min=2, max=50)])
+    cpf = StringField('CPF', validators=[DataRequired(message="Preenchimento obrigatório."), Length(min=11, max=11), Regexp('^\\d{11}$', message="CPF inválido!")])
+    email = StringField('Email', validators=[DataRequired(message="Preenchimento obrigatório."),Email(message="Email inválido!")])
 
     # Campos de select
     cargo = SelectField('Cargo', choices=[
@@ -23,21 +23,21 @@ class formServidor(FlaskForm):
         ('Voluntário(a)', 'Voluntário(a)'),
         ('Residência Jurídica', 'Residência Jurídica'),
         ('Outros', 'Outros')
-    ], validators=[DataRequired()])
+    ], validators=[DataRequired(message="Preenchimento obrigatório.")])
 
     status = SelectField('Status', choices=[
         ('Ativo', 'Ativo'), 
         ('Inativo', 'Inativo')
-    ], validators=[DataRequired()])
+    ], validators=[DataRequired(message="Preenchimento obrigatório.")])
 
-    telefone = StringField('Telefone', validators=[DataRequired()])
+    telefone = StringField('Telefone', validators=[DataRequired(message="Preenchimento obrigatório.")])
 
     sexo = SelectField('Sexo', choices=[
         ('Masculino', 'Masculino'),
         ('Feminino', 'Feminino'),
         ('Não declarado', 'Não declarado'),
         ('Intersex', 'Intersex'),
-    ], validators=[DataRequired()])
+    ], validators=[DataRequired(message="Preenchimento obrigatório.")])
 
     naturalidade = SelectField('Naturalidade', choices=[
         ('AC', 'AC'),
@@ -68,7 +68,7 @@ class formServidor(FlaskForm):
         ('SE', 'SE'),
         ('TO', 'TO'),
         ('EX', 'EX') # Para servidores que são estrangeiros
-    ], validators=[DataRequired()])
+    ], validators=[DataRequired(message="Preenchimento obrigatório.")])
 
     raca_cor = SelectField('Raça/Cor', choices=[
         ('Amarelo', 'Amarelo'),
@@ -76,7 +76,7 @@ class formServidor(FlaskForm):
         ('Índigena', 'Índigena'),
         ('Negro(a) - Pardo(a)', 'Negro(a) - Pardo(a)'),
         ('Negro(a) - Preto(a)', 'Negro(a) - Preto(a)'),
-    ], validators=[DataRequired()])
+    ], validators=[DataRequired(message="Preenchimento obrigatório.")])
 
     identidade_genero = SelectField('Identidade de Gênero', choices=[
         ('Cisgênero', 'Cisgênero'),
@@ -86,7 +86,7 @@ class formServidor(FlaskForm):
         ('Gênero fluido', 'Gênero fluido'),
         ('Agênero', 'Agênero'),
         ('Outra', 'Outra')
-    ], validators=[DataRequired()])
+    ], validators=[DataRequired(message="Preenchimento obrigatório.")])
 
     aprovado_cotas = SelectField('Aprovado em Cotas', choices=[
         ('Não', 'Não'),
@@ -96,7 +96,7 @@ class formServidor(FlaskForm):
         ('Cota para outras ações afirmativas', 'Cota para outras ações afirmativas'),
         ('Cota para Indígenas', 'Cota para Indígenas'),
         ('Reserva de vagas para a Resolução n. 497', 'Reserva de vagas para a Resolução n. 497')
-    ], validators=[DataRequired()])
+    ], validators=[DataRequired(message="Preenchimento obrigatório.")])
 
     # Campos de checkbox para deficiência
     deficiencia = SelectMultipleField('Deficiência', choices=[
@@ -108,14 +108,14 @@ class formServidor(FlaskForm):
         ('mental', 'Mental'),
         ('outras', 'Outras deficiências'),
         ('nao_possui', 'Não possui')
-    ], coerce=str, validators=[DataRequired()])
+    ], coerce=str, validators=[DataRequired(message="Preenchimento obrigatório.")])
 
     # Campos de data
-    data_nascimento = StringField('Data de Nascimento', validators=[DataRequired()])
-    data_posse = StringField('Data de Posse', validators=[DataRequired()])
+    data_nascimento = StringField('Data de Nascimento', validators=[DataRequired(message="Preenchimento obrigatório.")])
+    data_posse = StringField('Data de Posse', validators=[DataRequired(message="Preenchimento obrigatório.")])
 
     # Outros campos
-    orgao_lotacao = StringField('Órgão de Lotação', validators=[DataRequired(), Length(max=50)])
+    orgao_lotacao = StringField('Órgão de Lotação', validators=[DataRequired(message="Preenchimento obrigatório."), Length(max=50)])
     situacao_profissional = SelectField('Situação Profissional', choices=[
         ('Cargo de chefia', 'Cargo de chefia'),
         ('Outros cargos em comissão', 'Outros cargos em comissão'),
@@ -128,16 +128,16 @@ class formServidor(FlaskForm):
         ('Saída por Remoção', 'Saída por Remoção'),
         ('Saída por cessão/requisição', 'Saída por cessão/requisição'),
         ('Vigência de Contrato/Vínculo', 'Vigência de Contrato/Vínculo')
-    ], validators=[DataRequired()])
+    ], validators=[DataRequired(message="Preenchimento obrigatório.")])
 
-    data_inicio_situacao = StringField('Data de Início da Situação', validators=[DataRequired()])
+    data_inicio_situacao = StringField('Data de Início da Situação', validators=[DataRequired(message="Preenchimento obrigatório.")])
     data_saida_situacao = StringField('Data de Saída da Situação')
 
 class formMagistrado(FlaskForm):
     # Campos de texto
-    nome = StringField('Nome', validators=[DataRequired(), Length(min=2, max=50)])
-    cpf = StringField('CPF', validators=[DataRequired(), Length(min=11, max=11), Regexp('^\\d{11}$', message="CPF inválido!")])
-    email = StringField('Email', validators=[DataRequired(), Email(message="Email inválido!")])
+    nome = StringField('Nome', validators=[DataRequired(message="Preenchimento obrigatório."), Length(min=2, max=50)])
+    cpf = StringField('CPF', validators=[DataRequired(message="Preenchimento obrigatório."), Length(min=11, max=11), Regexp('^\\d{11}$', message="CPF inválido!")])
+    email = StringField('Email', validators=[DataRequired(message="Preenchimento obrigatório."), Email(message="Email inválido!")])
 
     # Campos de select
     cargo = SelectField('Cargo', choices=[
@@ -152,21 +152,21 @@ class formMagistrado(FlaskForm):
         ('Juiz(a) da classe advogado que atua como titular no TRE ou TSE', 'Juiz(a) da classe advogado que atua como titular no TRE ou TSE'),
         ('Juiz(a) da classe advogado que atua como substituto no TRE ou no TSE', 'Juiz(a) da classe advogado que atua como substituto no TRE ou no TSE'),
         ('Juiz Auxiliar que atua no 1º grau', 'Juiz Auxiliar que atua no 1º grau')
-    ], validators=[DataRequired()])
+    ], validators=[DataRequired(message="Preenchimento obrigatório.")])
 
     status = SelectField('Status', choices=[
         ('Ativo', 'Ativo'), 
         ('Inativo', 'Inativo')
-    ], validators=[DataRequired()])
+    ], validators=[DataRequired(message="Preenchimento obrigatório.")])
 
-    telefone = StringField('Telefone', validators=[DataRequired()])
+    telefone = StringField('Telefone', validators=[DataRequired(message="Preenchimento obrigatório.")])
 
     sexo = SelectField('Sexo', choices=[
         ('Masculino', 'Masculino'),
         ('Feminino', 'Feminino'),
         ('Não declarado', 'Não declarado'),
         ('Intersex', 'Intersex')
-    ], validators=[DataRequired()])
+    ], validators=[DataRequired(message="Preenchimento obrigatório.")])
 
     naturalidade = SelectField('Naturalidade', choices=[
         ('AC', 'AC'),
@@ -197,7 +197,7 @@ class formMagistrado(FlaskForm):
         ('SE', 'SE'),
         ('TO', 'TO'),
         ('EX', 'EX') # Para servidores que são estrangeiros
-    ], validators=[DataRequired()])
+    ], validators=[DataRequired(message="Preenchimento obrigatório.")])
 
     raca_cor = SelectField('Raça/Cor', choices=[
         ('Amarelo', 'Amarelo'),
@@ -205,7 +205,7 @@ class formMagistrado(FlaskForm):
         ('Índigena', 'Índigena'),
         ('Negro(a) - Pardo(a)', 'Negro(a) - Pardo(a)'),
         ('Negro(a) - Preto(a)', 'Negro(a) - Preto(a)'),
-    ], validators=[DataRequired()])
+    ], validators=[DataRequired(message="Preenchimento obrigatório.")])
 
     identidade_genero = SelectField('Identidade de Gênero', choices=[
         ('Cisgênero', 'Cisgênero'),
@@ -215,7 +215,7 @@ class formMagistrado(FlaskForm):
         ('Gênero fluido', 'Gênero fluido'),
         ('Agênero', 'Agênero'),
         ('Outra', 'Outra')
-    ], validators=[DataRequired()])
+    ], validators=[DataRequired(message="Preenchimento obrigatório.")])
 
     aprovado_cotas = SelectField('Aprovado em Cotas', choices=[
         ('Não', 'Não'),
@@ -224,7 +224,7 @@ class formMagistrado(FlaskForm):
         ('Cota para Gênero', 'Cota para Gênero'),
         ('Cota para outras ações afirmativas', 'Cota para outras ações afirmativas'),
         ('Cota para Indígenas', 'Cota para Indígenas')
-    ], validators=[DataRequired()])
+    ], validators=[DataRequired(message="Preenchimento obrigatório.")])
 
     # Campos de checkbox para deficiência
     deficiencia = SelectMultipleField('Deficiência', choices=[
@@ -236,14 +236,14 @@ class formMagistrado(FlaskForm):
         ('mental', 'Mental'),
         ('outras', 'Outras deficiências'),
         ('nao_possui', 'Não possui')
-    ], coerce=str, validators=[DataRequired()])
+    ], coerce=str, validators=[DataRequired(message="Preenchimento obrigatório.")])
 
     # Campos de data
-    data_nascimento = StringField('Data de Nascimento', validators=[DataRequired()])
-    data_posse = StringField('Data de Posse', validators=[DataRequired()])
+    data_nascimento = StringField('Data de Nascimento', validators=[DataRequired(message="Preenchimento obrigatório.")])
+    data_posse = StringField('Data de Posse', validators=[DataRequired(message="Preenchimento obrigatório.")])
 
     # Outros campos
-    orgao_lotacao = StringField('Órgão de Lotação', validators=[DataRequired(), Length(max=50)])
+    orgao_lotacao = StringField('Órgão de Lotação', validators=[DataRequired(message="Preenchimento obrigatório."), Length(max=50)])
 
     # Campos de select para Situação Profissional
     situacao_profissional = SelectField('Situação Profissional', choices=[
@@ -266,10 +266,10 @@ class formMagistrado(FlaskForm):
         ('saida_remocao_externa', 'Saída por Remoção Externa'),
         ('ocupante_acumulacao_jurisdicao', 'Ocupante de cargo em acumulação na Jurisdição'),
         ('magistrado_convocado_outro_tribunal', 'Magistrado(a) convocado para atuar em outro Tribunal ou Conselho')
-    ], validators=[DataRequired()])
+    ], validators=[DataRequired(message="Preenchimento obrigatório.")])
 
 
-    data_inicio_situacao = StringField('Data de Início da Situação', validators=[DataRequired()])
+    data_inicio_situacao = StringField('Data de Início da Situação', validators=[DataRequired(message="Preenchimento obrigatório.")])
     data_saida_situacao = StringField('Data de Saída da Situação')
 
     # Campos para promoção

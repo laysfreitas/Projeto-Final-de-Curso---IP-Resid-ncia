@@ -11,24 +11,49 @@
         </div>
 
         <!-- Exibe os gráficos -->
-        <script>
-            var fig1 = {{ fig|safe }}
-        </script>
-        
-        <script>
-            var fig2 = {{ fig_2|safe }}
-        </script>
-        
-        <script>
-            var fig3 = {{ fig_3|safe }}
-        </script>
-        
-        <script>
-            var fig4 = {{ fig_4|safe }}
-        </script>       
+        <h3 style="padding: 1cm; padding-left: 0cm;">Gráficos</h3>
 
-        <script>
-            var fig6 = {{ fig_6|safe }}
-        </script> 
+        <div class="text-center">
+            <h4 class="text-center" style="padding-bottom: 0.4cm; padding-top: 1cm;">Número de Magistrados por Cargo</h4>
+            <script>
+                var fig1 = {{ fig|safe }}
+            </script>
+        </div>
+        
+        <div class="text-center">
+            <h4 class="text-center" style="padding-bottom: 0.4cm; padding-top: 1cm;">Número de Magistrados por Sexo</h4>
+            <script>
+                var fig2 = {{ fig_2|safe }}
+            </script>
+        </div>
+            
+        <div class="text-center">
+            <h4 class="text-center" style="padding-bottom: 0.4cm; padding-top: 1cm;">Distribuição de Quantidade de Promoções por Ano</h4>
+            <script>
+                var fig3 = {{ fig_3|safe }}
+            </script>
+        </div>
+        
+        <div class="text-center">
+            <h4 class="text-center" style="padding-bottom: 0.4cm; padding-top: 1cm;">Distribuição de Magistrados por Tipo de Promoção</h4>
+            <script>
+                var fig4 = {{ fig_4|safe }}
+            </script>       
+
+        </div>
+                
+        <div class="text-center">
+            <h4 class="text-center" style="padding-bottom: 0.4cm; padding-top: 1cm;">Quantidade de Magistrados por Situação Profissional</h4>
+            <script>
+                var fig5 = {{ fig_5|safe }}
+            </script>
+        </div>
+        
+        <div class="text-center">
+            <h4 class="text-center" style="padding-bottom: 0.4cm; padding-top: 1cm;">Soma de Dias por Situação Profissional</h4>
+            <script>
+                var fig6 = {{ fig_6|safe }}
+            </script> 
+        </div>
     </div>
 {% endblock %}
